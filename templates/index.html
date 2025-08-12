@@ -1,0 +1,30 @@
+<!-- ...tu HTML previo... -->
+<form id="formulario">
+    <label for="instruccion">Escribe o dicta tu instrucción:</label><br>
+    <input type="text" id="instruccion" name="instruccion" size="60" required>
+    <button type="submit">Enviar</button>
+    <button type="button" id="vozBtn">🎤 Dictar</button>
+</form>
+<div id="respuesta"></div>
+<script>
+    // Reconocimiento de voz en navegador
+    const vozBtn = document.getElementById("vozBtn");
+    vozBtn.onclick = function() {
+        const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+        recognition.lang = "es-MX";
+        recognition.start();
+        recognition.onresult = function(event) {
+            document.getElementById("instruccion").value = event.results[0][0].transcript;
+        };
+    };
+
+    document.getElementById("formulario").onsubmit = function(e){
+        e.preventDefault();
+        const data = new FormData(formulario);
+        fetch("/instruccion", {method:"POST", body:data})
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("respuesta").innerText = "Respuesta: " + data.respuesta;
+            });
+    }
+</script>

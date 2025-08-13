@@ -3,6 +3,9 @@ import json
 from restaurant_agent import RestaurantAgent
 import openai
 
+import os
+openai.api_key = os.environ.get("OPENAI_API_KEY")
+
 app = Flask(__name__)
 agent = RestaurantAgent()
 openai.api_key = "TU_API_KEY"  # Tu API Key OpenAI
